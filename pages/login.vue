@@ -70,10 +70,19 @@ async function login() {
       },
     });
 
+    const user = await $apiFetch(`/users/${auth.resource_owner.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.token}`
+      },
+    });
+
     const { setToken } = useAuth()
     const { setUser } = useUser()
+    
     setToken(`Bearer ${auth.token}`)
-    setUser( auth.resource_owner )
+    setUser( user )
 
     window.location.pathname = '/my-info'
   } catch (err) {

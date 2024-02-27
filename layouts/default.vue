@@ -7,54 +7,64 @@
           <NuxtLink to="/">Logo</NuxtLink>
         </div>
         <div>
-          <ClientOnly>
-            <ul class="flex space-x-12">
-              <li><NuxtLink to="/">Home</NuxtLink></li>
-              <li v-if="!isLoggedIn"><NuxtLink to="/login">Login</NuxtLink></li>
-              <li v-if="!isLoggedIn">
-                <NuxtLink to="/register">Register</NuxtLink>
-              </li>
-              <li v-if="isLoggedIn">
-                <NuxtLink to="/my-info">My Info</NuxtLink>
-              </li>
-              <li v-if="isLoggedIn">
-                <NuxtLink to="/create">Create</NuxtLink>
-              </li>
-              <li v-if="isLoggedIn">
-                <a href="#" @click.prevent="logout">Logout</a>
-              </li>
-              <li>{{ getUser()?.name }}</li>
-            </ul>
-          </ClientOnly>
+          <ul class="flex space-x-12">
+            <li><NuxtLink to="/">Home</NuxtLink></li>
+            <li v-if="!isLoggedIn"><NuxtLink to="/login">Login</NuxtLink></li>
+            <li v-if="!isLoggedIn">
+              <NuxtLink to="/register">Register</NuxtLink>
+            </li>
+            <li v-if="isLoggedIn">
+              <NuxtLink to="/my-info">My Info</NuxtLink>
+            </li>
+            <li v-if="isLoggedIn">
+              <NuxtLink to="/create">Create</NuxtLink>
+            </li>
+            <li v-if="isLoggedIn">
+              <a href="#" @click.prevent="logout">Logout</a>
+            </li>
+            <li>{{ owner?.name }}</li>
+          </ul>
         </div>
       </div>
     </nav>
     <slot />
   </div>
 </template>
-  
-  <script setup>
-const title = useState("title", () => "Nuxt 3 Blog");
-const { $apiFetch } = useNuxtApp();
-const { removeToken, isLoggedIn, getToken } = useAuth();
+
+<script setup>
+const title = useState('title', () => 'Nuxt 3 Blog')
+const owner = ref(null);
+
+const { $apiFetch } = useNuxtApp()
+const { removeToken, isLoggedIn } = useAuth()
+const { getUser, removeUser } = useUser()
+
+
+onMounted(() => {
+  owner.value = getUser()
+});
 
 async function logout() {
   try {
-    await $apiFetch("/logout", {
+    await $apiFetch(`/users/token/revoke`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
     });
   } catch (err) {
     console.log(err.data);
   } finally {
     removeToken();
+    removeUser();
     window.location.pathname = "/";
   }
 }
 </script>
-  
-  <style>
+
+<style>
 .router-link-active {
   font-weight: bold;
 }
 </style>
-  
