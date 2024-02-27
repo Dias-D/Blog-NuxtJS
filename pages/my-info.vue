@@ -37,28 +37,35 @@ const user = ref(null);
 const posts = ref([]);
 
 const { $apiFetch } = useNuxtApp();
-const { getToken } = useAuth();
-const { getUser } = useUser();
+const { getToken, removeToken } = useAuth();
+const { getUser, removeUser } = useUser();
 
 onMounted(async () => {
   const token = getToken();
   const owner = getUser();
 
-  user.value = await $apiFetch(`/users/${owner.id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
-    },
-  });
+  try {
+    user.value = await $apiFetch(`/users/${owner.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
 
-  posts.value = await $apiFetch(`/posts/user/${owner.id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
-    },
-  });
+    posts.value = await $apiFetch(`/posts/user/${owner.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+  } catch (err) {
+    removeToken();
+    removeUser();
+    console.log(err.data);
+    errors.value = Object.values(err.data.errors).flat();
+  }
 });
 </script>
   
