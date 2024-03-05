@@ -41,7 +41,9 @@ const { getUser, removeUser } = useUser()
 
 
 onMounted(() => {
-  owner.value = getUser()
+  if (!isLoggedIn) {
+    owner.value = getUser()
+  }
 });
 
 async function logout() {

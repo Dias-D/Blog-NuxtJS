@@ -5,9 +5,6 @@
       v-if="errors.length > 0"
       className="mb-4 list-disc list-inside text-sm text-red-600"
     >
-      <li v-for="(error, index) in errors" :key="index">
-        {{ error }}
-      </li>
     </ul>
     <form action="#" class="space-y-6" @submit.prevent="login">
       <div>
@@ -87,7 +84,6 @@ async function login() {
     window.location.pathname = '/my-info'
   } catch (err) {
     console.log(err.data);
-    errors.value = Object.values(err.data.errors).flat();
   }
 
   isLoading.value = false;

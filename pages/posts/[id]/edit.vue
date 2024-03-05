@@ -1,12 +1,8 @@
 <template>
   <div class="container mx-auto w-1/2 py-8">
     <ul
-      v-if="errors.length > 0"
       className="mb-4 list-disc list-inside text-sm text-red-600"
     >
-      <li v-for="(error, index) in errors" :key="index">
-        {{ error }}
-      </li>
     </ul>
     <h2 class="text-2xl">Edit Post</h2>
     <form action="#" class="space-y-6" @submit.prevent="updatePost">
@@ -50,35 +46,49 @@
 definePageMeta({
   middleware: ["auth"],
 });
+
 const body = ref("");
-const errors = ref([]);
 const isLoading = ref(false);
 const title = ref("");
 const post = ref(null);
 
 const { $apiFetch } = useNuxtApp();
+const { getToken } = useAuth();
 const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
+  const token = getToken();
+
   try {
-    post.value = await $apiFetch(`/api/postsAuth/${route.params.id}`);
+    post.value = await $apiFetch(`/posts/${route.params.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token
+      }
+    });
+
     title.value = post.value.title;
     body.value = post.value.body;
   } catch (err) {
-    window.location.pathname = "/";
+    window.location.pathname = "/my-info";
   }
 });
 
 async function updatePost() {
   isLoading.value = true;
   try {
-    const post = await $apiFetch(`/api/post/${route.params.id}`, {
-      method: "PATCH",
+    const post = await $apiFetch(`/posts/${route.params.id}`, {
+      method: "PUT",
       body: {
         title: title.value,
         body: body.value,
       },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token
+      }
     });
 
     isLoading.value = false;
@@ -95,7 +105,6 @@ async function updatePost() {
       return;
     }
     console.log(err.data);
-    errors.value = Object.values(err.data.errors).flat();
     isLoading.value = false;
   }
 }
@@ -103,8 +112,12 @@ async function updatePost() {
 async function deletePost() {
   isLoading.value = true;
   try {
-    const post = await $apiFetch(`/api/post/${route.params.id}`, {
+    const post = await $apiFetch(`/posts/${route.params.id}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token
+      }
     });
 
     isLoading.value = false;
