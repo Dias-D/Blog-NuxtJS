@@ -61,10 +61,12 @@ onMounted(async () => {
       },
     });
   } catch (err) {
+    console.log(err.data);
+
     removeToken();
     removeUser();
-    console.log(err.data);
-    errors.value = Object.values(err.data.errors).flat();
+    
+    window.location.pathname = "/login";
   }
 });
 </script>
