@@ -85,7 +85,6 @@ async function createPost() {
     router.push("/");
   } catch (err) {
     console.log(err.data);
-    errors.value = Object.values(err.data.errors).flat();
     isLoading.value = false;
 
     removeToken();

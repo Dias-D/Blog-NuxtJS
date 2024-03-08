@@ -78,16 +78,19 @@ onMounted(async () => {
 
 async function updatePost() {
   isLoading.value = true;
+
   try {
     const post = await $apiFetch(`/posts/${route.params.id}`, {
       method: "PUT",
+      onRequest({ request, options }) {
+        options.headers.authorization = getToken()
+      },
       body: {
         title: title.value,
         body: body.value,
       },
       headers: {
-        "Content-Type": "application/json",
-        Authorization: token
+        "Content-Type": "application/json"
       }
     });
 
@@ -114,9 +117,11 @@ async function deletePost() {
   try {
     const post = await $apiFetch(`/posts/${route.params.id}`, {
       method: "DELETE",
+      onRequest({ request, options }) {
+        options.headers.authorization = getToken()
+      },
       headers: {
-        "Content-Type": "application/json",
-        Authorization: token
+        "Content-Type": "application/json"
       }
     });
 
