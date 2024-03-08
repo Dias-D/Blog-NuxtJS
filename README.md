@@ -1,75 +1,28 @@
-# Nuxt 3 Minimal Starter
+# BLOG
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+This is a small SSR made in NuxtJS, ​​with post management per user as well as the possibility of authentication
 
-## Setup
+## System settings: 
+* Nuxt: 3.10
+* Vue: 3.4
+* Vue Router1: 4.3
 
-Make sure to install the dependencies:
+### Additional Settings
+* Tailwindcss
+* Date fns
 
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+## How to install
+* Clone this project and enter to this folder:
 ```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+https://github.com/Dias-D/Blog-NuxtJS.git blog
+cd blog/
+```
+* Server development inicialization
+```
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+## API Example Project
 ```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+https://github.com/Dias-D/Blog-API.git
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
